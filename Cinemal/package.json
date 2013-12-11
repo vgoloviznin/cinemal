@@ -1,0 +1,18 @@
+{
+  "name": "Cinemal",
+  "version": "0.0.0",
+  "description": "Cinemal",
+  "main": "app.js",
+  "author": {
+    "name": "Pushok",
+    "email": ""
+  },
+  "dependencies": {
+    "express": "*",
+    "jade": "*",
+	"backbone": "*",
+	"jquery": "*",
+	"underscore": "*",
+	"mongoose" : "*"
+  }
+}
