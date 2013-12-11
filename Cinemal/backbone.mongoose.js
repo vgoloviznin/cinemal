@@ -22,7 +22,7 @@ var backboneMongoose = function(config) {
                             }
                     }
                     if (options.success) {
-                            options.success(model, docs, options);
+                            options.success(docs, model, options);
                     }
             },
 
