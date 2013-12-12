@@ -8,9 +8,10 @@ var mongooseSync = require("./backbone.mongoose");
 var mongoose = require("mongoose");
 var dbconfig = require("./dbconnect.json");
 
-var MovieModel = require("./app/models/movie");
-var MovieListView = require("./app/views/movieList");
-var MovieCollection = require("./app/collections/movies");
+var MovieModel          = require("./app/models/movie");
+var MovieView           = require("./app/views/movie");
+var MovieListView       = require("./app/views/movieList");
+var MovieCollection     = require("./app/collections/movies");
 
 var app = express();
 
@@ -75,5 +76,28 @@ app.get("/show", function(req, res) {
 
     movies.on("reset", function() {
         res.send(listView.render().el.innerHTML);
+    });
+});
+
+app.get("/show/:id", function(req, res) {
+    var movie
+    , movieView
+    , id
+    ;
+
+    id = req.params.id;
+
+    movie = new MovieModel({
+        id: id
+    });
+
+    movie.fetch();
+
+    movieView = new MovieView({
+        model: movie
+    });
+
+    movie.on("sync", function() {
+        res.send(movieView.render().el);
     });
 });
