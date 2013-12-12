@@ -7,10 +7,8 @@ var MovieLibrary = Backbone.Collection.extend({
     
     initialize: function() {
         this.fetch({
-            reset: true,
-            success: function(col) {
-                var a = 1;
-            }});
+            reset: true
+        });
     }
 });
 
