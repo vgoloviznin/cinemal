@@ -63,7 +63,6 @@ app.get("/savemodel", function(req, res) {
 });
 
 app.get("/show", function(req, res) {
-    
     var movies = new MovieCollection;
     
     var listView = new MovieListView({
@@ -71,6 +70,9 @@ app.get("/show", function(req, res) {
     });
 
     movies.on("reset", function() {
-       res.send(200, listView.render().el);
+        res.set('Content-Type', 'text/html');
+        
+        var viewResult = listView.render().el.innerHTML;
+        res.send(viewResult);
     });
 });
