@@ -8,6 +8,10 @@ var mongooseSync = require("./backbone.mongoose");
 var mongoose = require("mongoose");
 var dbconfig = require("./dbconnect.json");
 
+var MovieModel = require("./app/models/movie");
+var MovieListView = require("./app/views/movieList");
+var MovieCollection = require("./app/collections/movies");
+
 var app = express();
 
 app.configure(function() {
@@ -29,4 +33,43 @@ http.createServer(app).listen(app.get('port'), function(){
 
 app.get("/", function(req, resp) {
     resp.render("index");
+});
+
+
+app.get("/savemodel", function(req, res) {
+    var movie = new MovieModel({
+        name: "Awesome movie",
+        genre: ["Action", "Thriller"],
+        date:  "October 13, 1975 11:13:00",
+        time: 123, //in minutes
+        country: ["Ukraine", "China"],
+        rating: "PG-18",
+        url: "http://awesomemovie.com",
+    
+        budget: 10000, 
+        moneyReceived: 100000,
+    
+        stars: ["Seva Pushok", "Alyosha Online"],
+        director: ["Rodion Bykov", "Zahar Zaharov"],
+        writer: ["Vikroiya Pavlova"],
+        composer: ["Stas"],
+    
+        metaScore: [{name: "imdb", value: 10.0}]
+    });
+    
+    movie.save();
+
+    res.send('');
+});
+
+app.get("/show", function(req, res) {
+    var movies = new MovieCollection;
+    
+    var listView = new MovieListView({
+        collection: movies
+    });
+
+    movies.on("reset", function() {
+       res.send(200, listView.render().el);
+    });
 });

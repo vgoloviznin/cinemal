@@ -16,14 +16,14 @@ var backboneMongoose = function(config) {
         var MongooseModel = connection && connection.model(model.mongooseModel),
 
             process = function(err, docs) {
-                    if (err) {
-                            if (options.error) {
-                                    options.error(model, err, options);
-                            }
+                if (err) {
+                    if (options.error) {
+                        options.error(err);
                     }
-                    if (options.success) {
-                            options.success(model, docs, options);
-                    }
+                }
+                if (options.success) {
+                    options.success(docs);
+                }
             },
 
             data = model.toJSON() || {};
