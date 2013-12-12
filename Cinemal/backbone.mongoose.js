@@ -1,55 +1,56 @@
-﻿var mongoose = require("mongoose"),
+var mongoose = require("mongoose"),
         fs = require('fs');
 
 var backboneMongoose = function(config) {
 
-    var files = fs.readdirSync(config.schema_dir),
-        connection = mongoose.createConnection(config.db_url),
-        mongooseSync;
+    var files       = fs.readdirSync(config.schema_dir),
+        connection  = mongoose.createConnection(config.db_url),
+		mongooseSync;
 
-    files.forEach(function(fileName) {
-        require(config.schema_dir + '/' + fileName);
-    });
+	files.forEach(function(fileName) {
+		require(config.schema_dir + '/' + fileName);
+	});
 
     mongooseSync = function(method, model, options) {
 
         var MongooseModel = connection && connection.model(model.mongooseModel),
-
             process = function(err, docs) {
-                if (err) {
-                    if (options.error) {
-                        options.error(err);
-                    }
-                }
-                if (options.success) {
-                    options.success(docs);
-                }
+
+				if (err) {
+					if (options.error) {
+						options.error(err);
+					}
+				}
+
+				if (options.success) {
+					options.success(docs);
+				}
             },
 
-            data = model.toJSON() || {};
+			data = model.toJSON() || {};
 
         options = options || (options = {});
 
-        if (!MongooseModel) {
-                return;
-        }
+		if (!MongooseModel) {
+			return;
+		}
 
         switch (method) {
-            case 'create':
-                MongooseModel.create(data, process);
-                break;
-            case 'update':
-                MongooseModel.findByIdAndUpdate(model.id, data, process);
-                break;
-            case 'patch':
-                //MongooseModel.patch(model, process);
-                break;
-            case 'delete':
-                MongooseModel.remove(data, process);
-                break;
-            case 'read':
-                MongooseModel.find(data, process);
-        }
+			case 'create':
+				MongooseModel.create(data, process);
+				break;
+			case 'update':
+				MongooseModel.findByIdAndUpdate(model.id, data, process);
+				break;
+			case 'patch':
+				//MongooseModel.patch(model, process);
+				break;
+			case 'delete':
+				MongooseModel.remove(data, process);
+				break;
+			case 'read':
+				MongooseModel.find(data, process);
+		}
     };
     
     return mongooseSync;

@@ -63,6 +63,7 @@ app.get("/savemodel", function(req, res) {
 });
 
 app.get("/show", function(req, res) {
+    
     var movies = new MovieCollection;
     
     var listView = new MovieListView({
