@@ -1,6 +1,6 @@
-var mongoose = require("mongoose");
-var fs = require('fs');
-var Backbone = require('Backbone');
+var mongoose    = require("mongoose");
+var fs          = require('fs');
+var Backbone    = require('Backbone');
 
 var backboneMongoose = function(config) {
 

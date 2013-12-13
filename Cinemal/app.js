@@ -1,12 +1,12 @@
-var express = require('express');
-var http = require('http');
-var path = require('path');
+var express             = require('express');
+var http                = require('http');
+var path                = require('path');
 
-var Backbone = require("Backbone");
-var mongooseSync = require("./backbone.mongoose");
+var Backbone            = require("Backbone");
+var mongooseSync        = require("./backbone.mongoose");
 
-var mongoose = require("mongoose");
-var dbconfig = require("./dbconnect.json");
+var mongoose            = require("mongoose");
+var dbconfig            = require("./dbconnect.json");
 
 var MovieModel          = require("./app/models/movie");
 var MovieView           = require("./app/views/movie");
@@ -82,15 +82,14 @@ app.get("/show", function(req, res) {
 app.get("/show/:id", function(req, res) {
     var movie
     , movieView
-    , id;
+    , id
+    ;
 
     id = req.params.id;
     
     movie = new MovieModel({
         _id: id
     });
-
-    movie.fetch();
 
     movieView = new MovieView({
         model: movie
@@ -99,4 +98,7 @@ app.get("/show/:id", function(req, res) {
     movie.on("sync", function() {
         res.send(movieView.render().el);
     });
+
+    movie.fetch();
+    
 });
