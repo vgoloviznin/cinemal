@@ -63,7 +63,7 @@ app.get("/savemodel", function(req, res) {
     res.send('');
 });
 
-app.get("/show", function(req, res) {
+app.get("/movies", function(req, res) {
     var movies
     , listView
     ;
@@ -79,7 +79,7 @@ app.get("/show", function(req, res) {
     });
 });
 
-app.get("/show/:id", function(req, res) {
+app.get("/movies/:id", function(req, res) {
     var movie
     , movieView
     , id
@@ -101,4 +101,22 @@ app.get("/show/:id", function(req, res) {
 
     movie.fetch();
     
+});
+
+app.get("/movies/:id/delete", function(req, res) {
+    var movie
+    , id
+    ;
+
+    id = req.params.id;
+    
+    movie = new MovieModel({
+        _id: id
+    });
+ 
+    movie.destroy({
+        success: function(d) {
+            res.redirect('/movies');
+        }
+    });
 });
