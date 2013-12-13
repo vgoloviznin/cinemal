@@ -1,5 +1,6 @@
-var mongoose = require("mongoose"),
-        fs = require('fs');
+var mongoose = require("mongoose");
+var fs = require('fs');
+var Backbone = require('Backbone');
 
 var backboneMongoose = function(config) {
 
@@ -23,6 +24,9 @@ var backboneMongoose = function(config) {
 				}
 
 				if (options.success) {
+				    if (model instanceof Backbone.Model) {
+				        docs = docs[0];
+				    }
 					options.success(docs);
 				}
             },

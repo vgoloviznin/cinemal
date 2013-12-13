@@ -82,13 +82,12 @@ app.get("/show", function(req, res) {
 app.get("/show/:id", function(req, res) {
     var movie
     , movieView
-    , id
-    ;
+    , id;
 
     id = req.params.id;
-
+    
     movie = new MovieModel({
-        id: id
+        _id: id
     });
 
     movie.fetch();
