@@ -39,7 +39,7 @@ app.get("/", function(req, resp) {
 
 app.get("/savemodel", function(req, res) {
     var movie = new MovieModel({
-        name: "Awesome movie",
+        name: "Awesome movie" + Math.random().toFixed(2) * 100,
         genre: ["Action", "Thriller"],
         date:  "October 13, 1975 11:13:00",
         time: 123, //in minutes
