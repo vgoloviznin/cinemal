@@ -1,6 +1,6 @@
 ﻿var mongoose = require('mongoose');
 
-var MovieSchema = new mongoose.Schema({
+module.exports = mongoose.model('Movie',  new mongoose.Schema({
     name: String,
     genre: Array,
     date: Date, 
@@ -18,9 +18,7 @@ var MovieSchema = new mongoose.Schema({
     composer: Array,
     
     metaScore: Array // {}
-});
-
-exports = module.exports = mongoose.model('Movie', MovieSchema);
+}));
 
 /*
 

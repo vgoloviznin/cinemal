@@ -13,6 +13,8 @@ var MovieView           = require("./app/views/movie");
 var MovieListView       = require("./app/views/movieList");
 var MovieCollection     = require("./app/collections/movies");
 
+var UserModel = require("./app/models/user");
+
 var app = express();
 
 app.configure(function() {
@@ -116,6 +118,20 @@ app.get("/movies/:id/delete", function(req, res) {
  
     movie.destroy({
         success: function(d) {
+            res.redirect('/movies');
+        }
+    });
+});
+
+
+app.get("/user/create", function(req, res) {
+    var user = new UserModel({
+        username: "test",
+        password: "test"
+    });
+
+    user.saveUser({
+        success: function() {
             res.redirect('/movies');
         }
     });
