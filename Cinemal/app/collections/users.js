@@ -1,9 +1,9 @@
 ﻿var Backbone = require('Backbone');
-var Movie = require("../models/movie");
+var User = require("../models/user");
 
 module.exports = Backbone.Collection.extend({
-    model: Movie,
-    mongooseModel: "Movie",
+    model: User,
+    mongooseModel: "User",
     
     initialize: function() {
         this.fetch({

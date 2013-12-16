@@ -13,6 +13,9 @@
 	"backbone": "*",
 	"jquery": "*",
 	"underscore": "*",
-	"mongoose" : "*"
+	"mongoose" : "*",
+	"passport": "*",
+	"passport-local": "*",
+	"bcryptjs": "*"
   }
 }
