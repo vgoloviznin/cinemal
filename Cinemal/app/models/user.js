@@ -6,18 +6,46 @@ module.exports = Backbone.Model.extend({
     mongooseModel: "User",
     idAttribute: '_id',
     
-    saveUser: function(options) {
-        var model = this;
-        bcrypt.genSalt(SALT_WORK_FACTOR = 5, function(saltErr, salt) {
-            if (!saltErr) {
-                var password = model.get('password');
-                bcrypt.hash(password, salt, function(hashErr, hash) {
-                    if (!hashErr) {
-                        model.save({'password' : hash}, options);
-                    }
-                });
+    hashPassword: function(password) {
+        var salt = bcrypt.genSaltSync(SALT_WORK_FACTOR);
+        var hashed = bcrypt.hashSync(password, salt);
+
+        this.set('password', hashed);
+    },
+    
+    comparePassword: function(candidatePassword, callback) {
+        var password = this.get('password');
+
+        bcrypt.compare(candidatePassword, password, function(err, isMatch) {
+            if (err) {
+                return callback(err);
             }
-            //ToDo add error handling
+            return callback(null, isMatch);
+        });
+    }, 
+    //ToDo ???
+    authorizeUser: function(username, password, done) {
+        var model = this;
+        User.findOne({ username: username }, function(err, user) {
+            if (err) {
+                return done(err);
+            }
+            
+            if (!user) {
+                return done(null, false, { message: 'Unknown user ' + username });
+            }
+
+            model.comparePassword(password, function(compareError, isMatch) {
+                if (compareError) {
+                    return done(compareError);
+                }
+                
+                if (isMatch) {
+                    return done(null, user);
+                } else {
+                    return done(null, false, { message: 'Invalid password' });
+                }
+            });
         });
     }
 });
