@@ -67,14 +67,15 @@ passport.deserializeUser(function(id, done) {
 });
 
 passport.use(new LocalStrategy(function(username, password, done) {
-    var user = new UserModel({ username: username });
-
     var users = new UserCollection;
+    
     users.fetch({
+        data: {
+            username: username
+        },
         success: function(col) {
-            var found = col.findWhere(user.toJSON());
-
-            if (found) {
+            if (col.length == 1) {
+                var found = col.at(0);
                 var isMatch = bcrypt.compareSync(password, found.get('password'));
                 if (isMatch) {
                     return done(null, found);
@@ -84,7 +85,6 @@ passport.use(new LocalStrategy(function(username, password, done) {
             } else {
                 return done(null, false, { message: 'Incorrect username' });
             }
-
         },
         error: function(err) {
             return done(err);
@@ -189,8 +189,8 @@ app.get('/movies/:id/delete', ensureAuthenticated, function(req, res) {
 
 app.get('/user/create', function(req, res) {
     var user = new UserModel({
-        username: 'test',
-        password: 'test'
+        username: 'test2',
+        password: 'test2'
     });
 
     user.hashPassword();
@@ -213,7 +213,7 @@ app.post('/login', function(req, res, next) {
             return next(err);
         }
         if (!user) {
-            res.render('/login', { messages: [info.message] });
+            res.render('login', { messages: [info.message] });
         } else {
             req.logIn(user, function(loginError) {
                 if (loginError) {

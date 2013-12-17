@@ -13,8 +13,10 @@ var backboneMongoose = function(config) {
 	});
 
     mongooseSync = function(method, model, options) {
-
+        options = options || {};
+        
         var MongooseModel = connection && connection.model(model.mongooseModel),
+            isModel = model instanceof Backbone.Model,
             process = function(err, docs) {
 
 				if (err) {
@@ -24,16 +26,14 @@ var backboneMongoose = function(config) {
 				}
 
 				if (options.success) {
-				    if (model instanceof Backbone.Model) {
+				    if (isModel) {
 				        docs = docs[0];
 				    }
 					options.success(docs);
 				}
             },
 
-			data = model.toJSON() || {};
-
-        options = options || (options = {});
+			data = (isModel ? model.toJSON() : options.data) || {};
 
 		if (!MongooseModel) {
 			return;
