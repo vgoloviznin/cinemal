@@ -4,14 +4,8 @@ module.exports = function (passport) {
 	var MovieView           = require('../views/movie');
 	var MovieListView       = require('../views/movieList');
 	var MovieCollection     = require('../collections/movies');
-	var UserModel           = require('../models/user');
-	var UserCollection      = require('../collections/users');
 
 	return {
-
-		indexPage:  function(req, resp) {
-			resp.render('index');
-		},
 
 		savemodel: function(req, res) {
 		    var movie = new MovieModel({
@@ -53,15 +47,20 @@ module.exports = function (passport) {
 			movies.on('reset', function() {
 			    res.send(listView.render().el.innerHTML);
 			});
+
+			movies.fetch({
+				reset: true
+			});
 		},
 
 		getMovie: function(req, res) {
-		    var movie
-		    , movieView
-		    , id
-		    ;
 
-		    id = req.params.id;
+			var movies
+			, listView
+			, id
+			;
+
+			id = req.params.id;
 		    
 		    movie = new MovieModel({
 		        _id: id
@@ -75,8 +74,7 @@ module.exports = function (passport) {
 		        res.send(movieView.render().el);
 		    });
 
-		    movie.fetch();
-		    
+		    movie.fetch();	    
 		},
 
 		deleteMovie: function(req, res) {
@@ -95,47 +93,6 @@ module.exports = function (passport) {
 			        res.redirect('/movies');
 			    }
 			});
-		},
-
-		createUser: function(req, res) {
-			var user = new UserModel({
-				username: 'test',
-				password: 'test'
-			});
-
-			user.hashPassword();
-
-			user.save({
-				success: function() {
-			    	res.redirect('/movies');
-				}
-			});
-		},
-
-		loginPage: function(req, res) {
-	    	res.render('login');
-		},
-
-		login: function(req, res, next) {
-		    passport.authenticate('local', function(err, user, info) {
-		        
-		        if (err) {
-		            return next(err);
-		        }
-
-		        if (!user) {
-		            res.render('/login', { messages: [info.message] });
-		        } else {
-		            req.logIn(user, function(loginError) {
-		                if (loginError) {
-		                    next(loginError);
-		                } else {
-		                    res.redirect('/movies');
-		                }
-		            });
-		        }
-		        
-		    })(req, res, next);
 		}
 	}
 }
