@@ -2,7 +2,7 @@ module.exports = function (passport) {
 
 	var express             = require('express');
 	var router              = new express.Router();
-	var movieController     = require('../controllers/movie');
+	var movieController     = require('../controllers/movie')(passport);
 
 	router.get('/',           passport.ensureAuthenticated, movieController.getMovies);
 	router.get('/:id',        passport.ensureAuthenticated, movieController.getMovie);
