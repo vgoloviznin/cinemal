@@ -1,8 +1,9 @@
-var passport        = require('passport');
-var LocalStrategy   = require('passport-local').Strategy;
-var bcrypt          = require('bcryptjs');
-var UserCollection  = require('./collections/users');
-var UserModel 		= require('./models/user');
+var passport        = require('passport')
+, LocalStrategy     = require('passport-local').Strategy
+, bcrypt            = require('bcryptjs')
+, UserCollection    = require('./collections/users')
+, UserModel 		= require('./models/user')
+;
 
 passport.serializeUser(function(user, done) {
     done(null, user.get('id'));
@@ -51,7 +52,7 @@ passport.ensureAuthenticated = function (req, res, next) {
     if (req.isAuthenticated()) {
         next();
     } else {
-        res.redirect('/login');
+        res.redirect('/user/login');
     }
 }
 

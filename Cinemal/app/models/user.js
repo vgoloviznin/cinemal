@@ -1,18 +1,20 @@
-﻿var Backbone = require('Backbone');
-var bcrypt = require("bcryptjs");
-var SALT_WORK_FACTOR;
+﻿var Backbone    = require('Backbone')
+, bcrypt        = require('bcryptjs')
+, SALT_WORK_FACTOR
+;
 
 module.exports = Backbone.Model.extend({
-    mongooseModel: "User",
-    idAttribute: '_id',
+    mongooseModel:  'User',
+    idAttribute:    '_id',
     
     searchCriteria: function() {
         return this.toJSON();
     },
     
     hashPassword: function(password) {
-        var salt = bcrypt.genSaltSync(SALT_WORK_FACTOR);
-        var hashed = bcrypt.hashSync(password, salt);
+        var salt = bcrypt.genSaltSync(SALT_WORK_FACTOR)
+        , hashed = bcrypt.hashSync(password, salt)
+        ;
 
         this.set('password', hashed);
     },
@@ -27,9 +29,10 @@ module.exports = Backbone.Model.extend({
             return callback(null, isMatch);
         });
     }, 
-    //ToDo ???
+
     authorizeUser: function(username, password, done) {
         var model = this;
+        
         User.findOne({ username: username }, function(err, user) {
             if (err) {
                 return done(err);

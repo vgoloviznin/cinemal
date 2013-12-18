@@ -1,14 +1,13 @@
-var express             = require('express');
-var http                = require('http');
-var path                = require('path');
-var Backbone            = require('Backbone');
-var mongoose            = require('mongoose');
-var passport            = require('./app/passportSetup');
-var mongooseSync        = require('./backbone.mongoose');
-var dbconfig            = require('./dbconnect.json');
-var movieController     = require('./app/controllers/movie')();
-var userController      = require('./app/controllers/user')(passport);
-var app                 = express();
+var express     = require('express')
+, http          = require('http')
+, path          = require('path')
+, Backbone      = require('Backbone')
+, mongoose      = require('mongoose')
+, passport      = require('./app/passportSetup')
+, mongooseSync  = require('./backbone.mongoose')
+, dbconfig      = require('./dbconnect.json')
+, app           = express()
+;
 
 app.configure(function() {
     
@@ -26,6 +25,9 @@ app.configure(function() {
     app.use(express.session({ secret: 'awesomecinemalsecret' }));
     app.use(passport.initialize());
     app.use(passport.session());
+
+    app.use('/user',   require('./app/routes/user')(passport).middleware);
+    app.use('/movies', require('./app/routes/movie')(passport).middleware);
     
     Backbone.sync = mongooseSync(app.get('mongooseConfig'));
 });
@@ -35,14 +37,7 @@ http.createServer(app).listen(app.get('port'), function () {
 });
 
 app.get('/', function(req, res) {
-    res.render('index');
+    res.redirect('/movies');
 });
 
-app.get('/login', userController.loginPage);
-app.post('/login', userController.login);
 
-app.get('/savemodel', movieController.savemodel);
-
-app.get('/movies', passport.ensureAuthenticated, movieController.getMovies);
-app.get('/movies/:id', passport.ensureAuthenticated, movieController.getMovie);
-app.get('/movies/:id/delete', passport.ensureAuthenticated, movieController.deleteMovie);

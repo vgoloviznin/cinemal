@@ -1,6 +1,6 @@
 module.exports = function (passport) {
 
-    var UserModel       = require('../models/user');
+    var UserModel = require('../models/user');
 
 	return {
 

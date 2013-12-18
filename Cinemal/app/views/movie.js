@@ -1,5 +1,4 @@
-var 
-    $               = require('jquery')
+var $               = require('jquery')
     , Backbone      = require('Backbone')
     , jade          = require('jade')
 	;
