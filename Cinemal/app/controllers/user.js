@@ -29,7 +29,7 @@ module.exports = function (passport) {
 
 			            user.hashPassword();
 
-			            user.save(null, {
+			            user.save({}, {
 				            success: function() {
                                 req.logIn(user, function(loginError) {
 		                            if (loginError) {
@@ -38,10 +38,7 @@ module.exports = function (passport) {
 		                                res.redirect('/movies');
 		                            }
 		                        });
-				            }, 
-                            error: function(err){
-                                var a =1;
-                            }
+				            }
 			            });
                     }
                 },
