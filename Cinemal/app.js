@@ -22,12 +22,18 @@ app.configure(function() {
     app.use(express.static(path.join(__dirname, 'public')));
     app.use(express.cookieParser());
     app.use(express.bodyParser());
+    app.use(app.router);
     app.use(express.session({ secret: 'awesomecinemalsecret' }));
     app.use(passport.initialize());
     app.use(passport.session());
 
+    
     app.use('/user',   require('./app/routes/user')(passport).middleware);
     app.use('/movies', require('./app/routes/movie')(passport).middleware);
+
+    app.use(function (req, res) {
+        res.render('404');
+    });
     
     Backbone.sync = mongooseSync(app.get('mongooseConfig'));
 });
@@ -39,5 +45,7 @@ http.createServer(app).listen(app.get('port'), function () {
 app.get('/', function(req, res) {
     res.redirect('/movies');
 });
+
+
 
 
