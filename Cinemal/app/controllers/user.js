@@ -3,49 +3,57 @@ module.exports = function (passport) {
     var UserModel = require('../models/user');
     var UserCollection = require('../collections/users');
 
-	return {
+	var UserController = {
         registerPage: function(req, res){
             res.render('register');
         },
 
         register: function(req, res) {
             var username = req.body.username;
-            var password = req.body.password;
 
             var users = new UserCollection;
+
+            users.on('sync', function(col, resp, options){
+                if (col.length == 1) {
+                    res.render('register', {messages: ['Such user already exists']})
+                } else {
+                    UserController.saveUser(req, res);
+                }
+            });
 
             users.fetch({
                 data: {
                     username: username
-                },
-                success: function(col) {
-                    if (col.length == 1) {
-                        res.render('register', {messages: ['Such user already exists']})
-                    } else {
-                        var user = new UserModel({
-				            username: username,
-				            password: password
-			            });
-
-			            user.hashPassword();
-
-			            user.save({}, {
-				            success: function() {
-                                req.logIn(user, function(loginError) {
-		                            if (loginError) {
-		                                res.redirect('/login');
-		                            } else {
-		                                res.redirect('/movies');
-		                            }
-		                        });
-				            }
-			            });
-                    }
-                },
-                error: function(err) {
-                    res.render('register', {messages: ['An error occured']})
                 }
             });
+        },
+
+        saveUser: function(req, res){
+            var username = req.body.username;
+            var password = req.body.password;
+
+            var user = new UserModel({
+				username: username,
+				password: password
+			});
+
+			user.hashPassword();
+
+			user.save({}, {
+				success: function(user) {
+                    UserController.loginUser(req, res, user);
+				}
+			});
+        },
+
+        loginUser: function(req, res, user){
+            req.logIn(user, function(loginError) {
+		        if (loginError) {
+		            res.redirect('/login');
+		        } else {
+		            res.redirect('/movies');
+		        }
+		    });
         },
 
 		loginPage: function (req, res) {
@@ -79,4 +87,6 @@ module.exports = function (passport) {
             res.redirect('/');
         }
 	}
+
+    return UserController;
 }
