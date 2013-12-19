@@ -1,4 +1,4 @@
-module.exports = function (passport) {
+module.exports = function () {
 
 	var MovieModel          = require('../models/movie');
 	var MovieView           = require('../views/movie');
@@ -55,8 +55,8 @@ module.exports = function (passport) {
 
 		getMovie: function(req, res) {
 
-			var movies
-			, listView
+			var movie
+			, movieView
 			, id
 			;
 

@@ -26,7 +26,6 @@ app.configure(function() {
     app.use(express.session({ secret: 'awesomecinemalsecret' }));
     app.use(passport.initialize());
     app.use(passport.session());
-
     
     app.use('/user',   require('./app/routes/user')(passport).middleware);
     app.use('/movies', require('./app/routes/movie')(passport).middleware);
@@ -45,7 +44,3 @@ http.createServer(app).listen(app.get('port'), function () {
 app.get('/', function(req, res) {
     res.redirect('/movies');
 });
-
-
-
-
