@@ -7,10 +7,6 @@ module.exports = Backbone.Model.extend({
     mongooseModel:  'User',
     idAttribute:    '_id',
     
-    searchCriteria: function() {
-        return this.toJSON();
-    },
-    
     hashPassword: function(password) {
         var salt = bcrypt.genSaltSync(SALT_WORK_FACTOR)
         , hashed = bcrypt.hashSync(password, salt)

@@ -1,15 +1,13 @@
 ﻿extends layout
 
 block content
-	h1 Login
+	h1 Register
 	div
 		if messages
 			each val in messages
 				div= val			
 			
-		form(action='/user/login', method='POST')
+		form(action='/user/register', method='POST')
 			input(type='text', name='username')
 			input(type='password', name='password')
-			input(type='submit', value='Login')
-	div
-		a(href='/user/register') Register
+			input(type='submit', value='Register')

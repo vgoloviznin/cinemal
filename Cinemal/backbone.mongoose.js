@@ -26,7 +26,7 @@ var backboneMongoose = function(config) {
 				}
 
 				if (options.success) {
-				    if (isModel) {
+				    if (isModel && docs instanceof Array) {
 				        docs = docs[0];
 				    }
 					options.success(docs);

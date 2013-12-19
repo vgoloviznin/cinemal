@@ -56,4 +56,12 @@ passport.ensureAuthenticated = function (req, res, next) {
     }
 }
 
+passport.ensureNotAuthenticated = function (req, res, next) {
+    if (!req.isAuthenticated()) {
+        next();
+    } else {
+        res.redirect('/');
+    }
+}
+
 module.exports = passport;
